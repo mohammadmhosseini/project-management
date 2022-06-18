@@ -29,11 +29,19 @@ module.exports = class Application{
         })
     }
     createRoutes(){
+        const { AllRoutes } = require("./router/router");
         this.#app.get("/", (req, res, next) => {
             return res.json({
                 message : "This is my first Express application on github :)",
             });
-        })
+        });
+        this.#app.use(AllRoutes)                
+        /* this.#app.use((error, req, res, next) => {
+            try {
+            } catch (error) {
+                next(error)
+            }
+        }) */
     }
     errorHandler(){
         this.#app.use((req, res, next) => {
