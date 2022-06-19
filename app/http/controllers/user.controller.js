@@ -1,6 +1,11 @@
 class UserController{
-    getProfile(){
-
+    getProfile(req, res, next){
+        const user = req.user;
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            user,
+        });
     }
     editProfile(){
 
