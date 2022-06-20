@@ -12,7 +12,7 @@ const ProjectSchema = new Schema({
     timestamps : true
 });
 
-const ProjectModel = model("team", ProjectSchema);
+const ProjectModel = model("project", ProjectSchema);
 
 module.exports = {
     ProjectModel,

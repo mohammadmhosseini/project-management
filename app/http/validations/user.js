@@ -4,7 +4,6 @@ const path = require("path");
 function imageValidator(){
     return [
         body("image").custom((value, {req}) => {
-            console.log(req.file);
             const exts = [".jpg",".png",".jpeg",".gif"];
             const maxSize = 5 * 1024 * 1024;
             if(Object.keys(req.file).length == 0) throw "لطفا یک تصویر را انتخاب کنید";

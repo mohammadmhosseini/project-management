@@ -1,0 +1,9 @@
+### create project
+POST http://localhost:3000/project/create HTTP/1.1
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+{
+    "title" : "عنوان تستی برای پروژه",
+    "text" : "توضیحات تستی برای پروژه ایجاد شده"
+}
