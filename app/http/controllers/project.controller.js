@@ -19,7 +19,16 @@ class ProjectController {
       message : "افزودن پروژه با موفقیت انجام شد"
     });
   }
-  getAllProjects() {}
+  async getAllProjects(req, res, next) {
+    const owner = req.user._id;
+
+    const projects = await ProjectModel.find({owner});
+    return res.status(200).json({
+      status : 200,
+      success : true,
+      projects
+    }); 
+  }
   getProjectById() {}
   getProjectsOfTeam() {}
   getProjectsOfUser() {}
