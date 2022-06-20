@@ -1,7 +1,7 @@
 const { UserModel } = require("../../models/user");
 const { jwtTokenVerify } = require("../../modules/functions");
 
-async function autoLogin(req, res, next){
+const autoLogin = async(req, res, next) => {
     try {
         let authError = { status : 401, message: "لطفا وارد حساب کاربری خود شوید"};
         const authorization = req?.headers?.authorization;
