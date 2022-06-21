@@ -7,3 +7,18 @@ Content-Type: application/json
     "title" : "عنوان تستی برای پروژه",
     "text" : "توضیحات تستی برای پروژه ایجاد شده"
 }
+
+### get all projects
+GET http://localhost:3000/project/list HTTP/1.1
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+### get project by id
+GET http://localhost:3000/project/62b185eff73c20da2924da19 HTTP/1.1
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+### remove project
+DELETE http://localhost:3000/project/remove/62b185eff73c20da2924da19 HTTP/1.1
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
