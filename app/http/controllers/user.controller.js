@@ -3,7 +3,7 @@ const { UserModel } = require("../../models/user");
 class UserController{
     getProfile(req, res, next){
         const user = req.user;
-        user.profile_image = req.protocol + "://" + req.get("host") + "/" + user.profile_image;
+        user.profile_image = createLinkForImages(user.profile_image, req);;
         return res.status(200).json({
             status: 200,
             success: true,
