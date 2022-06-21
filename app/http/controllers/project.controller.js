@@ -1,5 +1,6 @@
 const { ProjectModel } = require("../../models/project");
 const autoBind = require("auto-bind");
+const { createLinkForImages } = require("../../modules/functions");
 
 class ProjectController {
   constructor(){
@@ -31,6 +32,9 @@ class ProjectController {
     try {
       const owner = req.user._id;
       const projects = await ProjectModel.find({owner});
+      for (const project of projects) {
+        project.image = createLinkForImages(project.image, req);
+      }
       return res.status(200).json({
         status : 200,
         success : true,
@@ -45,7 +49,7 @@ class ProjectController {
       const owner = req.user._id;
       const projectId = req.params.id;
       const project = await this.findProject(projectId, owner);
-      project.image = req.protocol + "://" + req.get("host") + "/" + project.image;
+      project.image = createLinkForImages(project.image, req);
       return res.status(200).json({
         status : 200,
         success : true,
@@ -72,9 +76,52 @@ class ProjectController {
       next(error)
     }
   }
+  async updateProject(req, res, next) {
+    try {
+      const owner = req.user._id;
+      const projectId = req.params.id;
+      await this.findProject(projectId, owner);
+      const data = {...req.body};
+      Object.entries(data).forEach(([key, value]) => {
+        if(!["title", "text", "tags"].includes(key)) delete data[key];
+        if(["", " ", 0, -1, null, undefined, NaN].includes(value)) delete data[key];
+        if(key == "tags" && data['tags'].constructor === Array){
+          data['tags'] = data['tags'].filter(item => {
+            if(!["", " ", 0, -1, null, undefined, NaN].includes(item)) return item;
+          })
+          if(data['tags'].length == 0) delete data['tags'];
+        }
+      })
+      const result = await ProjectModel.updateOne({_id : projectId}, {$set : data});
+      if(result.modifiedCount == 0) throw { status : 400, message : "ویرایش پروژه انجام نشد"};
+      return res.status(200).json({
+        status : 200,
+        success : true,
+        message : "ویرایش پرژه با موفقیت انجام شد"
+      });
+    } catch (error) {
+      next(error)
+    }
+  }
+  async updateProjectImage(req, res ,next){
+    try {
+      const {image} = req.body;
+      const owner = req.user._id;
+      const projectId = req.params.id;
+      await this.findProject(projectId, owner);
+      const result = await ProjectModel.updateOne({_id : projectId}, {$set : {image}});
+      if(result.modifiedCount == 0) throw {status : 400, message : "ویرایش تصویر پروژه انجام نشد"};
+      return res.status(200).json({
+        status : 200,
+        success : true,
+        message : "ویرایش تصویر پرژه با موفقیت انجام شد"
+      });
+    } catch (error) {
+      next(error)
+    }
+  }
   getProjectsOfTeam() {}
   getProjectsOfUser() {}
-  updateProject() {}
   async findProject(projectId, owner){
     const project = await ProjectModel.findOne({owner, _id : projectId});
     if(!project) throw { status : 400, message : "پروژه ای یافت نشد"};

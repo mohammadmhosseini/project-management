@@ -11,6 +11,8 @@ router.post("/create", autoLogin,fileupload(), uploadFile, createProjectValidato
 router.get("/list", autoLogin, ProjectController.getAllProjects);
 router.get("/:id", autoLogin, mongoIdValidator(), expressValidatorMapper, ProjectController.getProjectById);
 router.delete("/remove/:id", autoLogin, mongoIdValidator(), expressValidatorMapper, ProjectController.removeProject);
+router.put("/edit/:id", autoLogin, mongoIdValidator(), expressValidatorMapper, ProjectController.updateProject);
+router.patch("/edit-projectImage/:id", autoLogin,fileupload(), uploadFile, mongoIdValidator(), expressValidatorMapper, ProjectController.updateProjectImage);
 
 module.exports = {
   projectRoutes: router,

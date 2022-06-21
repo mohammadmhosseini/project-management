@@ -14,11 +14,22 @@ Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
 
 ### get project by id
-GET http://localhost:3000/project/62b185eff73c20da2924da19 HTTP/1.1
+GET http://localhost:3000/project/62b065307318640e83956245 HTTP/1.1
 Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
 
-### remove project
+### remove project by id
 DELETE http://localhost:3000/project/remove/62b185eff73c20da2924da19 HTTP/1.1
 Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
+
+### update project by id
+PUT http://localhost:3000/project/edit/62b095fa570bd2ba24c6f022 HTTP/1.1
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+{
+    "title" : "create store website",
+    "text" : "we are creating a store website with our team to publish that on github and sell it",
+    "tags" : ["nodejs", "express", "react", "mongodb"]
+}
