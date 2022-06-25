@@ -38,7 +38,7 @@ function createUploadPath(){
 }
 
 function createLinkForImages(fileAddress, req){
-    return req.protocol + "://" + req.get("host") + "/" + fileAddress;
+    return fileAddress ? req.protocol + "://" + req.get("host") + "/" + fileAddress : "بدون عکس"
 }
 
 module.exports = {
