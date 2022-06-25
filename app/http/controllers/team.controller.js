@@ -55,12 +55,51 @@ class TeamController{
     async getMyTeams(req, res, next){
         try {
             const userId = req.user._id;
-            const myTeams = await TeamModel.find({
-                $or : [
-                    {owner : userId},
-                    {users : userId}
-                ]
-            });
+            const myTeams = await TeamModel.aggregate([
+                {
+                    $match : {
+                        $or : [
+                            {owner : userId},
+                            {users : userId}
+                        ]
+                    }
+                },
+                {
+                    $lookup : {
+                        from : "users",
+                        localField : "owner",
+                        foreignField : "_id",
+                        as : "owner"
+                    },
+                },
+                {
+                    $lookup : {
+                        from : "users",
+                        localField : "users",
+                        foreignField : "_id",
+                        as : "users"
+                    }
+                },
+                {
+                    $project : {
+                        "name" : 1,
+                        "description" : 1,
+                        "username" : 1,
+                        "users.username" : 1,
+                        "users.email" : 1,
+                        "users.mobile" : 1,
+                        "owner.username" : 1,
+                        "owner.email" : 1,
+                        "owner.mobile" : 1
+                    }
+                },
+                {
+                    $unwind : "$owner"
+                },               
+                {
+                    $unwind : "$users"
+                }               
+            ])
             if(!myTeams) throw { status : 404, message : "تیمی یافت نشد"};
             return res.status(200).json({
                 status: 200,
@@ -121,8 +160,32 @@ class TeamController{
     removeUserFromTeam(){
 
     }
-    editTeam(){
-        
+    async editTeam(req, res, next){
+        try {
+            const data = {...req.body};
+            const userId = req.user._id;
+            console.log(userId);
+            const {teamId} = req.params;
+            console.log(teamId);
+            const team = await TeamModel.findOne({owner : userId, _id : teamId});
+            console.log(team);
+            if(!team) throw { status : 404, message : "تیمی یافت نشد"};
+            Object.keys(data).forEach((key) => {
+                if([""," ",null, undefined, NaN].includes(data[key])) delete data[key];
+                if(!["name", "description"].includes(key)) delete data[key];
+            });
+            const updateResult = await TeamModel.updateOne({_id: teamId}, {
+                $set : data
+            });
+            if(updateResult.modifiedCount == 0) throw { status : 500, message : "ویرایش مشخصات تیم انجام نشد"};
+            return res.status(200).json({
+                status : 200,
+                success : true,
+                message : "ویرایش مشخصات تیم با موفقیت انجام شد"
+            });
+        } catch (error) {
+            next(error)
+        } 
     }
     async findeUserInTeam(teamId, userId){
         const result = await TeamModel.findOne({

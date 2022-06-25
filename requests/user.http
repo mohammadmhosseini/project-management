@@ -12,3 +12,15 @@ Content-Type: application/json
     "last_name" : "Hosseini",
     "skills" : ["backend developer", "node.js", "express.js"]
 }
+
+### get all user invite requests
+GET http://localhost:3000/user/inviteRequests HTTP/1.1
+Authorization: Bearer {{$dotenv token}}
+
+### get requests by status
+GET http://localhost:3000/user/inviteRequests/pending HTTP/1.1
+Authorization: Bearer {{$dotenv token}}
+
+### accept request
+GET http://localhost:3000/user/change-status-request/62b312dbb2d12550bc4890c3/accepted HTTP/1.1
+Authorization: Bearer {{$dotenv token}}

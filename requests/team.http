@@ -4,9 +4,9 @@ Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
 
 {
-    "name" : "code masters",
+    "name" : "progerammers",
     "description" : "text for test for create new team",
-    "username" : "codemasters.8"
+    "username" : "prog_dev"
 }
 
 ### get all teams
@@ -15,7 +15,7 @@ Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
 
 ### get team by id
-GET http://localhost:3000/team/62b1ca6879c5d687214eeef4 HTTP/1.1
+GET http://localhost:3000/team/62b2db1273e5e1b76d985e48 HTTP/1.1
 Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
 
@@ -30,6 +30,16 @@ Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
 
 ### invite user to team
-GET http://localhost:3000/team/invite/62b2db1273e5e1b76d985e48/alimehrpoya HTTP/1.1
+GET http://localhost:3000/team/invite/62b2fe42b2d12550bc4890aa/amHedayati HTTP/1.1
 Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
+
+### edit team by id
+PUT http://localhost:3000/team/edit/62b1ca6879c5d687214eeef4 HTTP/1.1
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+{
+    "name" : "dev warriors",
+    "description" : "back-end node js developers"
+}

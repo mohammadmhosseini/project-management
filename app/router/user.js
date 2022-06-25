@@ -12,6 +12,9 @@ router.post("/profile-image", autoLogin,
   upload_multer.single("image"), imageValidator(),
   expressValidatorMapper, UserController.uploadProfileImage
 );
+router.get("/inviteRequests", autoLogin, UserController.getAllInviteRequests);
+router.get("/inviteRequests/:status", autoLogin, UserController.getRequestsByStatus);
+router.get("/change-status-request/:id/:status", autoLogin, UserController.changeRequestStatus);
 
 module.exports = {
   userRoutes: router,

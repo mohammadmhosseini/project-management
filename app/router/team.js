@@ -10,6 +10,7 @@ router.get("/list", autoLogin, TeamController.getListOfTeams);
 router.get("/me", autoLogin , TeamController.getMyTeams);
 router.get("/invite/:teamId/:username", autoLogin, TeamController.inviteUserToTeam);
 router.get("/:id", autoLogin, mongoIdValidator(), expressValidatorMapper, TeamController.getTeamById);
+router.put("/edit/:teamId", autoLogin, TeamController.editTeam);
 router.delete("/remove/:id", autoLogin, TeamController.removeTeamById);
 
 module.exports = {
