@@ -14,14 +14,20 @@ class UserController{
         });
     }
     async editProfile(req, res, next){
-        let data = {...req.body};
-        const {_id} = req.user;
+        const data = {...req.body};
+        const { _id } = req.user;
 
         let fields = ["first_name", "last_name", "skills"];
         let badValues = ["", " ", null, undefined, -1, 0, [], {}];
         Object.entries(data).forEach(([key, value]) => {
             if(!fields.includes(key)) delete data[key];
             if(badValues.includes(value)) delete data[key];
+            if(key == "skills" && data['skills'].constructor === Array){
+                data['skills'] = data['skills'].filter(item => {
+                    if(!["", " ", null, undefined, -1, 0, [], {}].includes(item)) return item;
+                });
+                if(data['skills'].length == 0) delete data['skills'];
+            }
         });
 
         const result = await UserModel.updateOne({_id}, {$set : data});
@@ -90,7 +96,6 @@ class UserController{
                 requests : requests?.[0]?.inviteRequests || []
             }); 
         } catch (error) {
-            console.log(error);
             next(error)
         }
     }

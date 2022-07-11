@@ -164,11 +164,8 @@ class TeamController{
         try {
             const data = {...req.body};
             const userId = req.user._id;
-            console.log(userId);
             const {teamId} = req.params;
-            console.log(teamId);
             const team = await TeamModel.findOne({owner : userId, _id : teamId});
-            console.log(team);
             if(!team) throw { status : 404, message : "تیمی یافت نشد"};
             Object.keys(data).forEach((key) => {
                 if([""," ",null, undefined, NaN].includes(data[key])) delete data[key];
