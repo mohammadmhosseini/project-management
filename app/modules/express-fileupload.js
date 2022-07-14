@@ -7,7 +7,7 @@ const uploadFile = async(req, res, next) => {
         const image = req.files?.image;
         const type = path.extname(image?.name);
         if(![".jpg", ".png", ".jpeg", ".webp", ".gif"].includes(type)) throw { status : 400, message : "فرمت تصویر ارسالی نادرست است"};
-        const imagePath = createUploadPath() + (Date.now() + type);
+        const imagePath = path.join(createUploadPath(), (Date.now() + type));
         req.body.image = imagePath.replace(/[\\\\]/gm, "/").substring(7);
         const uploadPath = path.join(__dirname, "..","..", imagePath);
         image.mv(uploadPath, (err => {

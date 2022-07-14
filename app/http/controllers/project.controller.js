@@ -1,6 +1,8 @@
 const { ProjectModel } = require("../../models/project");
 const autoBind = require("auto-bind");
 const { createLinkForImages } = require("../../modules/functions");
+const path = require("path");
+const fs = require("fs");
 
 class ProjectController {
   constructor(){
@@ -63,9 +65,11 @@ class ProjectController {
     try {
       const owner = req.user._id;
       const projectId = req.params.id;
-      await this.findProject(projectId, owner);
+      const project = await this.findProject(projectId, owner);
+      const projectImagePath = path.join(__dirname, "..", "..", "..", "public", project?.image);
       const result = await ProjectModel.deleteOne({_id : projectId});
       if(result.deletedCount == 0) throw { status : 400, message : "حذف پروژه انجام نشد"};
+      fs.unlinkSync(projectImagePath);
       return res.status(200).json({
         status : 200,
         success : true,
